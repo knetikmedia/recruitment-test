@@ -54,7 +54,7 @@ So that **I can gain context on a devices location**
 
 #### Bonus points
 
-Render Connection Status and Signal Strength in a unique and attention grab
+Render **Connection Status** and **Signal Strength** in a unique and attention grabbing
 manner.
 
 #### Acceptance criteria
