@@ -59,8 +59,8 @@ manner.
 
 #### Acceptance criteria
 
-- For the filters location, results are returned
-- The Connection Status, Location and Updated Date of the device are displayed
+- For the filtered device property, results are returned
+- The Connection Status, Location Name and Updated Date of the device are displayed
 
 # Technical questions
 
