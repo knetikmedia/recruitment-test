@@ -13,22 +13,17 @@ Create a github repository with the following contents.
 
 ## Coding Test
 
-Knetik has a public API available at [https://codetest.api.devsandbox.knetikcloud.com/](https://codetest.api.devsandbox.knetikcloud.com/) that you can use to get restaurant information, including restaurant details and delivery information.
+Knetik has a public API available at [https://recruitment-test-api.devsandbox.knetikcloud.com/](https://recruitment-test-api.devsandbox.knetikcloud.com/) that you can use to get device information, including device details.
 
-As an example, [https://codetest.api.devsandbox.knetikcloud.com/restaurants?q=se19](https://codetest.api.devsandbox.knetikcloud.com/restaurants?q=se19) returns a list of restaurants that deliver to the outcode SE19, including some basic restaurant information.
+As an example, [https://recruitment-test-api.devsandbox.knetikcloud.com/devices?filter=location:12](https://recruitment-test-api.devsandbox.knetikcloud.com/devices?filter=location:12) returns a list of devices with the location name 12, including some basic device information.
 
-The API requires you specify a set of valid request headers:
+Docs for the api are located here: [https://recruitment-test-api.devsandbox.knetikcloud.com/swagger-ui/](https://recruitment-test-api.devsandbox.knetikcloud.com/swagger-ui/)
 
-```
-Authorization: Bearer [token]
-Host: codetest.api.devsandbox.knetikcloud.com
-```
+The task is to create an application that displays the following minimal information about each device.
 
-The task is to create an application that accepts an outcode as a parameter. The application should then display the following information about each restaurant that delivers to that outcode:
-
-- Name
-- Rating
-- Types of food for the restaurant
+- Connection Status
+- Location Name
+- Updated At
 
 ### Platform Choice
 
@@ -57,10 +52,15 @@ As a **user running the application**
 I can **render a detail view of the device listing all its properties and a section of related devices by location**  
 So that **I can gain context on a devices location**
 
+#### Bonus points
+
+Render Connection Status and Signal Strength in a unique and attention grab
+manner.
+
 #### Acceptance criteria
 
-- For the known outcode `se19`, results are returned
-- The Name, Cuisine Types and Rating of the restaurant are displayed
+- For the filters location, results are returned
+- The Connection Status, Location and Updated Date of the device are displayed
 
 # Technical questions
 
@@ -71,7 +71,6 @@ Please answer the following questions in a markdown file called `Answers to tech
 3. How would you track down a performance issue in production? Have you ever had to do this?
 4. How would you improve the Knetik APIs that you just used?
 5. Please describe yourself using JSON.
-
 
 #### Thanks for your time, we look forward to hearing from you!
 - The [Knetik Tech team](http://github.com/knetikmedia)
