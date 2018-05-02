@@ -49,18 +49,13 @@ Feel free to spend as much or as little time on the exercise as you like as long
 ### User Story
 
 As a **user running the application**  
-I can **view a list of restaurants in a user submitted outcode (e.g. SE19)**  
-So that **I know which restaurants are currently available**
-
-If you have chosen a native mobile application platform please also include the following:
-
-As a **user running the application**  
-I can **view the the restaurant logo along side restaurant information**  
-So that **I know exactly which restaurants are currently available**
+I can **view a list of devices and filter by location, parent_location, and
+connected
+So that **I know which devices are currently online**
 
 As a **user running the application**  
-I can **use GPS to find my current postcode to retrieve restaurant results**  
-So that **I dont need to type it in**
+I can **render a detail view of the device listing all its properties and a section of related devices by location**  
+So that **I can gain context on a devices location**
 
 #### Acceptance criteria
 
