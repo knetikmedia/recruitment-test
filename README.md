@@ -13,7 +13,7 @@ Create a github repository with the following contents.
 
 ## Coding Test
 
-Knetik has a public API available at [https://recruitment-test-api.devsandbox.knetikcloud.com/](https://recruitment-test-api.devsandbox.knetikcloud.com/) that you can use to get device information, including device details.
+Knetik has a public API available at [https://recruitment-test-api.devsandbox.knetikcloud.com/devices](https://recruitment-test-api.devsandbox.knetikcloud.com/devices) that you can use to get device information, including device details.
 
 As an example, [https://recruitment-test-api.devsandbox.knetikcloud.com/devices?filter=location:12](https://recruitment-test-api.devsandbox.knetikcloud.com/devices?filter=location:12) returns a list of devices with the location name 12, including some basic device information.
 
