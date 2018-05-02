@@ -45,7 +45,7 @@ Feel free to spend as much or as little time on the exercise as you like as long
 
 As a **user running the application**  
 I can **view a list of devices and filter by location, parent_location, and
-connected
+connected**
 So that **I know which devices are currently online**
 
 As a **user running the application**  
