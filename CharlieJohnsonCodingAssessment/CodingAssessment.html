@@ -1,0 +1,336 @@
+<html>
+<head>
+<title>Knetik Coding Assessment</title>
+	<style>
+		#device_list div { display:table-row; }
+		#device_list div div { padding: 5px; display:table-cell; text-align:center;}
+		#all_devices { float: left;}
+		#single_device { float: left; visibility: hidden; border: 1px solid black}
+		#selected_device { float: left;}
+		#location_devices { float: right; }
+		#single_device div { float: left; }
+		#single_device div span { font-weight: bold; }
+		.connected_device { color: darkgreen; }
+		.not_connected_device { color: red; }
+		#selected_device li { list-style-type: none;  }
+		#location_devices li { list-style-type: square; }
+	</style>
+	<script>
+		var api_url = "https://recruitment-test-api.devsandbox.knetikcloud.com/devices?";
+		
+		function GetDeviceInfo()
+		{	
+			var api_call_url = AppendPageNumberAndSize(api_url);
+			api_call_url = AppendFilter(api_call_url);
+
+			var api_call = new XMLHttpRequest();
+			api_call.open("GET", api_call_url);
+			api_call.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			api_call.onreadystatechange = function() { 
+				if (api_call.readyState == XMLHttpRequest.DONE)
+				{
+					ClearDeviceTable();
+					var all_devices = JSON.parse(api_call.responseText);
+					document.getElementById("gridsize").value = all_devices.size;
+					document.getElementById("totalpage").value = all_devices.total_pages;
+					document.getElementById("totalelements").value = all_devices.total_elements;
+					if (all_devices.first) { document.getElementById("pagenumber").innerHTML = 1; }
+					else if (all_devices.last) { document.getElementById("pagenumber").innerHTML = all_devices.total_pages; }
+					all_devices.content.forEach(LoadDeviceInfo);
+				}
+			}
+			api_call.send();
+		}
+		
+		function GetDevicesFromLocation(Location)
+		{
+			document.getElementById("single_device").style.visibility = "visible";
+			var api_call = new XMLHttpRequest();
+			api_call.open("GET", api_url + "filter=location:" + Location);
+			api_call.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			api_call.onreadystatechange = function() {
+				if (api_call.readyState == XMLHttpRequest.DONE)
+				{
+					var device_list_element = document.getElementById("location_devices");
+					device_list_element.innerHTML = "";
+					var all_devices_in_location = JSON.parse(api_call.responseText);
+					all_devices_in_location.content.forEach(CreateDeviceIdListItem);
+				}
+			}
+			api_call.send();
+		}
+		
+		function GetSpecificDevice(Id)
+		{
+			var api_call = new XMLHttpRequest();
+			api_call.open("GET", api_url + "filter=id:" + Id);
+			api_call.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			api_call.onreadystatechange = function() {
+				if (api_call.readyState == XMLHttpRequest.DONE)
+				{
+					var device = JSON.parse(api_call.responseText);
+					var selected_device_area = document.getElementById("selected_device");
+					selected_device_area.innerHTML = "";
+					selected_device_area.appendChild(CreateSingleDeviceInfo("Id", device.content[0].id));
+					selected_device_area.appendChild(CreateSingleDeviceInfo("Location", device.content[0].location));
+					GetDevicesFromLocation(device.content[0].location);
+					selected_device_area.appendChild(CreateSingleDeviceInfo("Mac Address", device.content[0].mac_address));
+					selected_device_area.appendChild(CreateSingleDeviceInfo("Connected", device.content[0].connected));
+					selected_device_area.appendChild(CreateSingleDeviceInfo("Parent Location", device.content[0].parent_location));
+					selected_device_area.appendChild(CreateSingleDeviceInfo("Updated At", device.content[0].updated_at));
+					selected_device_area.appendChild(CreateSingleDeviceInfo("Signal", device.content[0].signal));
+					if (device.content[0].connected) { selected_device_area.setAttribute("class", "connected_device"); }
+					else { selected_device_area.setAttribute("class", "not_connected_device"); }
+				}
+			}
+			api_call.send();
+		}
+		
+		function CreateDeviceIdListItem(Device, index, arr)
+		{
+			var list_item = document.createElement("li");
+			var link = document.createElement("a");
+			link.setAttribute("href", "#");
+			link.setAttribute("onclick", "GetSpecificDevice('" + Device.id + "'); return false;");
+			link.innerHTML = Device.id;
+			list_item.appendChild(link);
+			if (Device.connected) { list_item.setAttribute("class", "connected_device"); }
+			else { list_item.setAttribute("class", "not_connected_device"); }
+			document.getElementById("location_devices").appendChild(list_item);
+			return link;
+		}
+		
+		function AppendFilter(API_URL)
+		{
+			var location_filter = document.getElementById("location_filter");
+			var parent_location_filter = document.getElementById("parent_location_filter");
+			var either_filter = document.getElementById("connected_either");
+			var connected_true_filter = document.getElementById("connected_true");
+			var connected_false_filter = document.getElementById("connected_false");
+			
+			var filter_value = location_filter.value;
+			var pipe_needed = false;
+			if (filter_value.length > 0)
+			{
+				API_URL = API_URL + "&filter=location:" + filter_value;
+				pipe_needed = true;
+			}
+			
+			filter_value = parent_location_filter.value;
+			if (filter_value.length > 0)
+			{
+				if (pipe_needed)
+				{
+					API_URL = API_URL + "%7Cparent_location:" + filter_value;
+				}
+				else 
+				{
+					API_URL = API_URL + "&filter=parent_location:" + filter_value;
+					pipe_needed = true;
+				}
+				
+			}
+			
+			if (connected_true_filter.selected)
+			{
+				if (pipe_needed)
+				{
+					return API_URL + "%7Cconnected:true";
+				}
+				else
+				{
+					return API_URL + "&filter=connected:true";
+				}
+			}
+			
+			if (connected_false_filter.selected)
+			{
+				if (pipe_needed)
+				{
+					return API_URL + "%7Cconnected:false";
+				}
+				else 
+				{
+					return API_URL + "&filter=connected:false";
+				}
+			}
+			return API_URL;
+		}
+		
+		function AppendPageNumberAndSize(API_URL)
+		{
+			var pagenumber = parseInt(document.getElementById("pagenumber").innerHTML);
+			if (pagenumber == undefined) { pagenumber = 1 };
+			if (pagenumber < 1) { pagenumber = 1; }
+			var gridsize = parseInt(document.getElementById("gridsize").value);
+			if (gridsize == undefined) { gridsize = 1; }
+			if (gridsize < 1) { gridsize = 1; }
+			return API_URL += "page=" + pagenumber + "&size=" + gridsize;
+		}
+		
+		function LoadDeviceInfo(DeviceInfo, index, arr)
+		{
+			var device_list = document.getElementById("device_list");
+			device_list.insertBefore(CreateDeviceRowDisplay(DeviceInfo), device_list.lastChild.previousSibling);
+		}
+		
+		function GetDeviceRowId(unique_id)
+		{
+			return "device_id_" + unique_id;
+		}
+		
+		function CreateDeviceRowDisplay(Device)
+		{
+			var row = document.createElement("div");
+			if (Device.connected) { row.setAttribute("class", "connected_device"); }
+			else { row.setAttribute("class", "not_connected_device"); }
+			row.appendChild(CreateDeviceIdCell(Device.id));
+			row.appendChild(CreateDeviceInfoCell(Device.location));
+			row.appendChild(CreateDeviceInfoCell(Device.mac_address));
+			row.appendChild(CreateDeviceInfoCell(Device.connected));
+			row.appendChild(CreateDeviceInfoCell(Device.parent_location));
+			row.appendChild(CreateDeviceInfoCell(Device.updated_at));
+			row.appendChild(CreateDeviceInfoCell(Device.signal));
+			return row;
+		}
+		
+		function CreateDeviceIdCell(device_id)
+		{
+			var id_cell = document.createElement("div");
+			var link = document.createElement("a");
+			link.setAttribute("href", "#");
+			link.setAttribute("onclick", "GetSpecificDevice('"+device_id+"')");
+			link.innerHTML = device_id;
+			id_cell.appendChild(link);
+			return id_cell;
+		}
+		
+		function CreateDeviceInfoCell(info_value)
+		{
+			var info_cell = document.createElement("div");
+			info_cell.innerHTML = info_value;
+			return info_cell;
+		}
+		
+		function ClearDeviceTable()
+		{
+			var device_table = document.getElementById("device_list");
+			var header_row = document.getElementById("device_list_header_row");
+			var footer_row = document.getElementById("device_list_footer_row");
+			while (!(footer_row.previousSibling == header_row))
+			{
+				device_table.removeChild(footer_row.previousSibling);
+			}
+		}
+		
+		function FirstPage()
+		{
+			document.getElementById("pagenumber").innerHTML = "1";
+			GetDeviceInfo();
+		}
+		
+		function PreviousPage()
+		{
+			var pagenumber = document.getElementById("pagenumber");
+			var current_page = parseInt(pagenumber.innerHTML);
+			
+			if (current_page > 1)
+			{				
+				pagenumber.innerHTML = --current_page;
+			}
+			GetDeviceInfo();
+		}
+		
+		function NextPage()
+		{
+			var pagenumber = document.getElementById("pagenumber");
+			var current_page = parseInt(pagenumber.innerHTML);
+			
+			pagenumber.innerHTML = ++current_page;
+			GetDeviceInfo();
+		}
+		
+		function LastPage()
+		{
+			document.getElementById("pagenumber").innerHTML = document.getElementById("totalpage").value;
+			GetDeviceInfo();
+		}
+		
+		
+		function CreateSingleDeviceInfo(Info_Type, Info_Value)
+		{
+			var device_info = document.createElement("li");
+			device_info.innerHTML = Info_Type + ": " + Info_Value;
+			return device_info;
+		}
+	</script>
+</head>
+<body>
+	<div id="device_filters">
+		<div> Location: <input onchange="GetDeviceInfo();" onkeyup="if (event.keyCode === 13) { GetDeviceInfo(); }" id="location_filter" /> </div>
+		<div> Parent Location: <input onchange="GetDeviceInfo();" onkeyup="if (event.keyCode === 13) { GetDeviceInfo(); }" id="parent_location_filter" /> </div>
+		<div> Connected 
+			<select onchange="GetDeviceInfo();"> 
+				<option id="connected_either"> either </option>
+				<option id="connected_true">true</option>
+				<option id="connected_false">false</option> 
+			</select> 
+		</div>
+	</div>
+	<div id="all_devices">
+		
+		<div id="device_list" style="display:table;">
+			<div id="device_list_header_row">
+				<div> Id </div>
+				<div> Location</div>
+				<div> Mac Address </div>
+				<div> Connected </div>
+				<div> Parent Location </div>
+				<div> Updated At </div>
+				<div> Signal </div>
+			</div>
+		<div id="device_list_footer_row">
+			<div>
+				<a href="#" onclick="FirstPage(); return false;"> 
+				<< 
+				</a> 
+			</div>
+			<div>
+				<a href="#" onclick="PreviousPage(); return false;">
+				<
+				</a>
+			</div>
+			<div id="pagenumber">1</div>
+			<div>
+				<a href="#" onclick="NextPage(); return false;">
+				>
+				</a>
+			</div>
+			<div>
+				<a href="3" onclick="LastPage(); return false;">
+				>>
+				</a>
+			</div>
+			<div id="grid_size">
+				Page Size:<input type="text" id="gridsize" value="25" onchange="GetDeviceInfo();" onkeyup="if (event.keyCode === 13) { GetDeviceInfo(); }"/> 
+				<input type="hidden" id="totalpage" value="0" />
+				<input type="hidden" id="totalelements" value="0" />
+			</div>
+		</div>
+	</div>
+</div>
+<div id="single_device">
+	<div> <span>Selected Device</span> <br />
+		<ul id="selected_device">
+		</ul>
+	</div>
+	<div> <span>Devices in Location</span> <br />
+		<ul id="location_devices">
+		</ul>
+	</div>
+</div>
+	<script>
+		GetDeviceInfo();
+	</script>
+</body>
+</html>
