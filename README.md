@@ -13,13 +13,14 @@ Create a github repository with the following contents.
 
 ## Coding Test
 
-TrustHab has a public API available at [https://recruitment-test-api.devsandbox.knetikcloud.com/devices](https://recruitment-test-api.devsandbox.knetikcloud.com/devices) that you can use to get device information, including device details.
+### API
 
-As an example, [https://recruitment-test-api.devsandbox.knetikcloud.com/devices?filter=location:12](https://recruitment-test-api.devsandbox.knetikcloud.com/devices?filter=location:12) returns a list of devices with the location name 12, including some basic device information.
+Create a RESTful CRUD API that renders devices from the included
+[devices.json](./devices.json) file
 
-Docs for the api are located here: [https://recruitment-test-api.devsandbox.knetikcloud.com/swagger-ui/](https://recruitment-test-api.devsandbox.knetikcloud.com/swagger-ui/)
+### Front End
 
-The task is to create an application that displays the following minimal information about each device.
+Create an application that displays the following minimal information about each device.
 
 - Connection Status
 - Location Name
