@@ -18,7 +18,7 @@ Create a github repository with the following contents.
 Create a RESTful CRUD API that renders devices from the included
 [devices.json](./devices.json) file
 
-### Front End
+### UI
 
 Create an application that displays the following minimal information about each device.
 
