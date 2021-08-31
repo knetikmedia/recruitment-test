@@ -1,4 +1,4 @@
-Knetik Engineer Recruitment Test
+TrustHab Engineer Recruitment Test
 ==================================
 
 Thank you for taking the time to do our technical test. It consists of two parts:
@@ -13,7 +13,7 @@ Create a github repository with the following contents.
 
 ## Coding Test
 
-Knetik has a public API available at [https://recruitment-test-api.devsandbox.knetikcloud.com/devices](https://recruitment-test-api.devsandbox.knetikcloud.com/devices) that you can use to get device information, including device details.
+TrustHab has a public API available at [https://recruitment-test-api.devsandbox.knetikcloud.com/devices](https://recruitment-test-api.devsandbox.knetikcloud.com/devices) that you can use to get device information, including device details.
 
 As an example, [https://recruitment-test-api.devsandbox.knetikcloud.com/devices?filter=location:12](https://recruitment-test-api.devsandbox.knetikcloud.com/devices?filter=location:12) returns a list of devices with the location name 12, including some basic device information.
 
@@ -28,9 +28,8 @@ The task is to create an application that displays the following minimal informa
 ### Platform Choice
 
 You can create the application as either a command line application or web application.  
-Using Node or the Front End Javascript Framework of your choice.
 
-Think about the type of work you would like to do at Knetik and **choose an appropriate application type**.
+Think about the type of work you would like to do at TrustHab and **choose an appropriate application type**.
 
 ### Task requirements
 
@@ -69,8 +68,8 @@ Please answer the following questions in a markdown file called `Answers to tech
 1. How long did you spend on the coding test? What would you add to your solution if you had more time? If you didn't spend much time on the coding test then use this as an opportunity to explain what you would add.
 2. What was the most useful feature that was added to the latest version of your chosen language? Please include a snippet of code that shows how you've used it.
 3. How would you track down a performance issue in production? Have you ever had to do this?
-4. How would you improve the Knetik APIs that you just used?
+4. How would you improve the TrustHab APIs that you just used?
 5. Please describe yourself using JSON.
 
 #### Thanks for your time, we look forward to hearing from you!
-- The [Knetik Tech team](http://github.com/knetikmedia)
+- The [TrustHab Tech team](http://github.com/knetikmedia)
